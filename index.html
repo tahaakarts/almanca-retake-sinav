@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GiE Retake Übungstest — Kap. 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1a2332;
+      --muted: #5a6578;
+      --line: #c8d0dc;
+      --paper: #f7f5f0;
+      --panel: #ffffff;
+      --accent: #0f5c4c;
+      --accent-soft: #d8efe8;
+      --wrong: #9b2c2c;
+      --wrong-soft: #fde8e8;
+      --ok: #0f5c4c;
+      --ok-soft: #d8efe8;
+      --shadow: 0 12px 40px rgba(26, 35, 50, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Source Sans 3", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, #dfe9e4 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 100% 0%, #e8e0d4 0%, transparent 50%),
+        var(--paper);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    header {
+      margin-bottom: 1.75rem;
+    }
+
+    .eyebrow {
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      margin: 0 0 0.4rem;
+    }
+
+    h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 700;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .sub {
+      color: var(--muted);
+      margin: 0;
+      max-width: 38rem;
+    }
+
+    .scorebar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      margin: 1.25rem 0 0;
+      padding: 0.9rem 1rem;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .scorebar strong {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.15rem;
+    }
+
+    .scorebar .hint {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.25rem 1.4rem;
+      margin-top: 1.1rem;
+    }
+
+    h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.2rem;
+      margin: 0 0 0.35rem;
+    }
+
+    .pts {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0 0 1rem;
+    }
+
+    .q {
+      margin: 0 0 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .q:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .q-label {
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.35rem 0.4rem;
+      margin: 0.25rem 0;
+    }
+
+    input[type="text"] {
+      font: inherit;
+      border: none;
+      border-bottom: 2px solid var(--line);
+      background: transparent;
+      padding: 0.15rem 0.35rem;
+      min-width: 5.5rem;
+      color: var(--ink);
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-bottom-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    input.wide { min-width: min(100%, 28rem); width: 100%; }
+    input.med { min-width: 9rem; }
+    input.short { min-width: 4.2rem; }
+
+    input.ok {
+      border-bottom-color: var(--ok);
+      background: var(--ok-soft);
+    }
+
+    input.bad {
+      border-bottom-color: var(--wrong);
+      background: var(--wrong-soft);
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 0.35rem;
+      font-size: 0.88rem;
+      color: var(--wrong);
+    }
+
+    .feedback.show { display: block; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.4rem;
+      position: sticky;
+      bottom: 0.75rem;
+      z-index: 5;
+    }
+
+    button {
+      font: inherit;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      padding: 0.75rem 1.15rem;
+      transition: transform 0.12s, background 0.12s;
+    }
+
+    button:active { transform: translateY(1px); }
+
+    .btn-check {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-check:hover { background: #0a463a; }
+
+    .btn-reset {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .btn-reset:hover { background: #f0f2f5; }
+
+    .btn-answers {
+      background: #243447;
+      color: #fff;
+    }
+
+    .btn-answers:hover { background: #1a2635; }
+
+    footer {
+      margin-top: 1.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .toast {
+      display: none;
+      margin-top: 0.85rem;
+      padding: 0.85rem 1rem;
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      font-weight: 600;
+    }
+
+    .toast.show { display: block; }
+
+    @media (max-width: 520px) {
+      input.wide { min-width: 100%; }
+      .actions { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="eyebrow">Kozminski · GiE · 1. Jahr</p>
+      <h1>Retake Übungstest — Kap. 1</h1>
+      <p class="sub">Boşlukları doldur, sonra „Antworten prüfen“ ile kontrol et. Yanlışlar kırmızı, doğrular yeşil olur.</p>
+      <div class="scorebar">
+        <strong id="scoreText">— / 32</strong>
+        <span class="hint" id="scoreHint">Henüz kontrol edilmedi</span>
+      </div>
+    </header>
+
+    <section>
+      <h2>1. Ergänzen Sie die Lücken</h2>
+      <p class="pts">12 Punkte</p>
+
+      <div class="q" data-group="1a">
+        <div class="q-label">a)</div>
+        <div class="line">A: <input data-key="1a1" class="short" type="text" autocomplete="off" /> geht es dir?</div>
+        <div class="line">B: <input data-key="1a2" class="short" type="text" autocomplete="off" />, gut. Und dir?</div>
+        <div class="feedback" data-fb="1a"></div>
+      </div>
+
+      <div class="q" data-group="1b">
+        <div class="q-label">b)</div>
+        <div class="line">A: <input data-key="1b1" class="short" type="text" autocomplete="off" /> bist du?</div>
+        <div class="line">B: Ich heiße Tom Weber.</div>
+        <div class="feedback" data-fb="1b"></div>
+      </div>
+
+      <div class="q" data-group="1c">
+        <div class="q-label">c)</div>
+        <div class="line">A: <input data-key="1c1" class="short" type="text" autocomplete="off" /> machst du in Berlin?</div>
+        <div class="line">B: Ich <input data-key="1c2" class="med" type="text" autocomplete="off" /> BWL an der Humboldt-Universität.</div>
+        <div class="feedback" data-fb="1c"></div>
+      </div>
+
+      <div class="q" data-group="1d">
+        <div class="q-label">d)</div>
+        <div class="line">A: <input data-key="1d1" class="short" type="text" autocomplete="off" /> bist du jetzt?</div>
+        <div class="line">B: Ich bin <input data-key="1d2" class="short" type="text" autocomplete="off" /> Österreich.</div>
+        <div class="line">A: Und <input data-key="1d3" class="short" type="text" autocomplete="off" /> kommt sie?</div>
+        <div class="line">B: Sie kommt <input data-key="1d4" class="short" type="text" autocomplete="off" /> Spanien.</div>
+        <div class="feedback" data-fb="1d"></div>
+      </div>
+
+      <div class="q" data-group="1e">
+        <div class="q-label">e)</div>
+        <div class="line">A: <input data-key="1e1" class="short" type="text" autocomplete="off" /> Sprachen sprichst du?</div>
+        <div class="line">B: Deutsch und <input data-key="1e2" class="med" type="text" autocomplete="off" />.</div>
+        <div class="feedback" data-fb="1e"></div>
+      </div>
+
+      <div class="q" data-group="1f">
+        <div class="q-label">f)</div>
+        <div class="line">A: <input data-key="1f1" class="short" type="text" autocomplete="off" /> alt bist du?</div>
+        <div class="line">B: Ich <input data-key="1f2" class="short" type="text" autocomplete="off" /> 21.</div>
+        <div class="feedback" data-fb="1f"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Konjugieren Sie die Verben</h2>
+      <p class="pts">8 Punkte</p>
+
+      <div class="q" data-group="2a">
+        <div class="q-label">a) sein</div>
+        <div class="line">Du <input data-key="2a1" class="short" type="text" autocomplete="off" /> aus Köln und sie (Plural) <input data-key="2a2" class="short" type="text" autocomplete="off" /> aus München.</div>
+        <div class="feedback" data-fb="2a"></div>
+      </div>
+
+      <div class="q" data-group="2b">
+        <div class="q-label">b) haben</div>
+        <div class="line">Wann <input data-key="2b1" class="short" type="text" autocomplete="off" /> ihr Zeit?</div>
+        <div class="feedback" data-fb="2b"></div>
+      </div>
+
+      <div class="q" data-group="2c">
+        <div class="q-label">c) wohnen / leben</div>
+        <div class="line">Herr Müller, <input data-key="2c1" class="med" type="text" autocomplete="off" /> Sie in Wien?</div>
+        <div class="line">— Ja, ich <input data-key="2c2" class="short" type="text" autocomplete="off" /> dort.</div>
+        <div class="feedback" data-fb="2c"></div>
+      </div>
+
+      <div class="q" data-group="2d">
+        <div class="q-label">d) kaufen</div>
+        <div class="line">Lisa <input data-key="2d1" class="short" type="text" autocomplete="off" /> ein Buch.</div>
+        <div class="line">Wir <input data-key="2d2" class="short" type="text" autocomplete="off" /> zwei Bücher.</div>
+        <div class="feedback" data-fb="2d"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Übersetzen Sie ins Deutsche</h2>
+      <p class="pts">8 Punkte · „liegt im …“ kullan</p>
+
+      <div class="q" data-group="3a">
+        <div class="q-label">1.</div>
+        <div>Hamburg is situated in the north of Germany.</div>
+        <div class="line"><input data-key="3a1" class="wide" type="text" autocomplete="off" /></div>
+        <div class="feedback" data-fb="3a"></div>
+      </div>
+
+      <div class="q" data-group="3b">
+        <div class="q-label">2.</div>
+        <div>München is situated in the south of Germany.</div>
+        <div class="line"><input data-key="3b1" class="wide" type="text" autocomplete="off" /></div>
+        <div class="feedback" data-fb="3b"></div>
+      </div>
+
+      <div class="q" data-group="3c">
+        <div class="q-label">3.</div>
+        <div>Zürich is situated in the north of Switzerland.</div>
+        <div class="line"><input data-key="3c1" class="wide" type="text" autocomplete="off" /></div>
+        <div class="feedback" data-fb="3c"></div>
+      </div>
+
+      <div class="q" data-group="3d">
+        <div class="q-label">4.</div>
+        <div>Antalya is situated in the south of Turkey.</div>
+        <div class="line"><input data-key="3d1" class="wide" type="text" autocomplete="off" /></div>
+        <div class="feedback" data-fb="3d"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Geografie</h2>
+      <p class="pts">4 Punkte · Polonya ile sınırı olan 3 Alman eyaleti yaz</p>
+
+      <div class="q" data-group="4a">
+        <div class="line">1. <input data-key="4a1" class="med" type="text" autocomplete="off" /></div>
+        <div class="line">2. <input data-key="4a2" class="med" type="text" autocomplete="off" /></div>
+        <div class="line">3. <input data-key="4a3" class="med" type="text" autocomplete="off" /></div>
+        <div class="feedback" data-fb="4a"></div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button type="button" class="btn-check" id="checkBtn">Antworten prüfen</button>
+      <button type="button" class="btn-answers" id="showBtn">Doğru cevapları göster</button>
+      <button type="button" class="btn-reset" id="resetBtn">Sıfırla</button>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <footer>
+      Retake alıştırması · aynı konular (W-Fragen, Konjugation, Geografie, Richtungen)
+    </footer>
+  </div>
+
+  <script>
+    const answers = {
+      "1a1": ["wie"],
+      "1a2": ["danke"],
+      "1b1": ["wer"],
+      "1c1": ["was"],
+      "1c2": ["studiere"],
+      "1d1": ["wo"],
+      "1d2": ["in"],
+      "1d3": ["woher"],
+      "1d4": ["aus"],
+      "1e1": ["welche"],
+      "1e2": ["türkisch", "turkisch"],
+      "1f1": ["wie"],
+      "1f2": ["bin"],
+      "2a1": ["bist"],
+      "2a2": ["sind"],
+      "2b1": ["habt"],
+      "2c1": ["wohnen"],
+      "2c2": ["lebe", "wohne"],
+      "2d1": ["kauft"],
+      "2d2": ["kaufen"],
+      "3a1": [
+        "hamburg liegt im norden von deutschland",
+        "hamburg liegt im norden deutschlands"
+      ],
+      "3b1": [
+        "münchen liegt im süden von deutschland",
+        "munchen liegt im suden von deutschland",
+        "münchen liegt im süden deutschlands",
+        "munchen liegt im suden deutschlands"
+      ],
+      "3c1": [
+        "zürich liegt im norden der schweiz",
+        "zurich liegt im norden der schweiz",
+        "zürich liegt im norden von der schweiz",
+        "zurich liegt im norden von der schweiz"
+      ],
+      "3d1": [
+        "antalya liegt im süden der türkei",
+        "antalya liegt im suden der turkei",
+        "antalya liegt im süden von der türkei",
+        "antalya liegt im suden von der turkei"
+      ]
+    };
+
+    const states = [
+      "brandenburg",
+      "mecklenburg-vorpommern",
+      "mecklenburg vorpommern",
+      "sachsen",
+      "saxony"
+    ];
+
+    const expectedText = {
+      "1a": "Wie / Danke",
+      "1b": "Wer",
+      "1c": "Was / studiere",
+      "1d": "Wo / in / woher / aus",
+      "1e": "Welche / Türkisch",
+      "1f": "Wie / bin",
+      "2a": "bist / sind",
+      "2b": "habt",
+      "2c": "wohnen / lebe (oder wohne)",
+      "2d": "kauft / kaufen",
+      "3a": "Hamburg liegt im Norden von Deutschland.",
+      "3b": "München liegt im Süden von Deutschland.",
+      "3c": "Zürich liegt im Norden der Schweiz.",
+      "3d": "Antalya liegt im Süden der Türkei.",
+      "4a": "Brandenburg, Mecklenburg-Vorpommern, Sachsen"
+    };
+
+    const points = {
+      "1a1": 1, "1a2": 1,
+      "1b1": 1,
+      "1c1": 1, "1c2": 1,
+      "1d1": 1, "1d2": 1, "1d3": 1, "1d4": 1,
+      "1e1": 1, "1e2": 1,
+      "1f1": 1, "1f2": 1,
+      "2a1": 1, "2a2": 1,
+      "2b1": 2,
+      "2c1": 1, "2c2": 1,
+      "2d1": 1, "2d2": 1,
+      "3a1": 2, "3b1": 2, "3c1": 2, "3d1": 2,
+      "4a1": 0, "4a2": 0, "4a3": 0
+    };
+
+    function norm(s) {
+      return (s || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[.,!?]+$/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/ß/g, "ss")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function matchKey(key, value) {
+      const n = norm(value);
+      if (!n) return false;
+      return (answers[key] || []).some((a) => norm(a) === n);
+    }
+
+    function checkStates() {
+      const vals = ["4a1", "4a2", "4a3"].map((k) =>
+        document.querySelector(`[data-key="${k}"]`).value
+      );
+      const normalized = vals.map(norm).filter(Boolean);
+      const unique = [...new Set(normalized)];
+      const validSet = new Set(states.map(norm));
+      // map aliases
+      const okNames = new Set(["brandenburg", "mecklenburg-vorpommern", "mecklenburg vorpommern", "sachsen", "saxony"]);
+      const mapped = unique.map((v) => {
+        if (v === "mecklenburg vorpommern" || v === "mecklenburg-vorpommern") return "mvp";
+        if (v === "saxony" || v === "sachsen") return "sachsen";
+        if (v === "brandenburg") return "brandenburg";
+        return v;
+      });
+      const mappedUnique = [...new Set(mapped)];
+      const correctOnes = mappedUnique.filter((v) =>
+        ["brandenburg", "mvp", "sachsen"].includes(v)
+      );
+      return { count: correctOnes.length, vals };
+    }
+
+    function clearMarks() {
+      document.querySelectorAll("input[data-key]").forEach((el) => {
+        el.classList.remove("ok", "bad");
+      });
+      document.querySelectorAll(".feedback").forEach((el) => {
+        el.classList.remove("show");
+        el.textContent = "";
+      });
+    }
+
+    function check() {
+      clearMarks();
+      let score = 0;
+      const max = 32;
+
+      Object.keys(answers).forEach((key) => {
+        const el = document.querySelector(`[data-key="${key}"]`);
+        const ok = matchKey(key, el.value);
+        el.classList.add(ok ? "ok" : "bad");
+        if (ok) score += points[key] || 1;
+      });
+
+      // feedback lines for groups with any wrong
+      Object.keys(expectedText).forEach((group) => {
+        if (group === "4a") return;
+        const inputs = document.querySelectorAll(`[data-key^="${group}"]`);
+        const anyBad = [...inputs].some((el) => el.classList.contains("bad"));
+        if (anyBad) {
+          const fb = document.querySelector(`[data-fb="${group}"]`);
+          fb.textContent = "Doğru: " + expectedText[group];
+          fb.classList.add("show");
+        }
+      });
+
+      const st = checkStates();
+      ["4a1", "4a2", "4a3"].forEach((key, i) => {
+        const el = document.querySelector(`[data-key="${key}"]`);
+        const v = norm(el.value);
+        let ok = false;
+        if (v === "brandenburg") ok = true;
+        if (v === "sachsen" || v === "saxony") ok = true;
+        if (v === "mecklenburg-vorpommern" || v === "mecklenburg vorpommern") ok = true;
+        el.classList.add(ok ? "ok" : "bad");
+      });
+      // geography: up to 4 points — roughly 1 + fraction; award 4 if 3 correct unique
+      const geoPoints = Math.min(4, Math.round((st.count / 3) * 4));
+      score += geoPoints;
+      if (st.count < 3) {
+        const fb = document.querySelector('[data-fb="4a"]');
+        fb.textContent = "Doğru: Brandenburg, Mecklenburg-Vorpommern, Sachsen";
+        fb.classList.add("show");
+      }
+
+      document.getElementById("scoreText").textContent = score + " / " + max;
+      let msg = "";
+      if (score >= 28) msg = "Çok iyi — retake’e hazırsın!";
+      else if (score >= 20) msg = "İyi gidiyor, yanlışları tekrar et.";
+      else if (score >= 12) msg = "Temel var; W-Fragen + yönleri pekiştir.";
+      else msg = "Önce W-Fragen ve sein/haben tekrar et.";
+      document.getElementById("scoreHint").textContent = msg;
+
+      const toast = document.getElementById("toast");
+      toast.textContent = "Sonuç: " + score + " / 32 — " + msg;
+      toast.classList.add("show");
+      toast.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function showAnswers() {
+      Object.keys(answers).forEach((key) => {
+        const el = document.querySelector(`[data-key="${key}"]`);
+        // pick nicely capitalized display from expectedText groups when possible
+        const raw = answers[key][0];
+        el.value = pretty(key, raw);
+      });
+      document.querySelector('[data-key="4a1"]').value = "Brandenburg";
+      document.querySelector('[data-key="4a2"]').value = "Mecklenburg-Vorpommern";
+      document.querySelector('[data-key="4a3"]').value = "Sachsen";
+      check();
+    }
+
+    function pretty(key, raw) {
+      const map = {
+        "1a1": "Wie", "1a2": "Danke",
+        "1b1": "Wer",
+        "1c1": "Was", "1c2": "studiere",
+        "1d1": "Wo", "1d2": "in", "1d3": "woher", "1d4": "aus",
+        "1e1": "Welche", "1e2": "Türkisch",
+        "1f1": "Wie", "1f2": "bin",
+        "2a1": "bist", "2a2": "sind",
+        "2b1": "habt",
+        "2c1": "wohnen", "2c2": "lebe",
+        "2d1": "kauft", "2d2": "kaufen",
+        "3a1": "Hamburg liegt im Norden von Deutschland.",
+        "3b1": "München liegt im Süden von Deutschland.",
+        "3c1": "Zürich liegt im Norden der Schweiz.",
+        "3d1": "Antalya liegt im Süden der Türkei."
+      };
+      return map[key] || raw;
+    }
+
+    function reset() {
+      document.querySelectorAll("input[data-key]").forEach((el) => {
+        el.value = "";
+      });
+      clearMarks();
+      document.getElementById("scoreText").textContent = "— / 32";
+      document.getElementById("scoreHint").textContent = "Henüz kontrol edilmedi";
+      document.getElementById("toast").classList.remove("show");
+    }
+
+    document.getElementById("checkBtn").addEventListener("click", check);
+    document.getElementById("showBtn").addEventListener("click", showAnswers);
+    document.getElementById("resetBtn").addEventListener("click", reset);
+  </script>
+</body>
+</html>
